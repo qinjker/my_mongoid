@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # MyMongoid
 
 TODO: Write a gem description
@@ -33,4 +32,3 @@ my_mongoid
 ==========
 
 Ruby 训练营第一个热身gem
->>>>>>> 141a8ee4022e9a50f2978fc52d2ec5d77cfeec1c
