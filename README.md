@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MyMongoid
 
 TODO: Write a gem description
@@ -27,3 +28,9 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+=======
+my_mongoid
+==========
+
+Ruby 训练营第一个热身gem
+>>>>>>> 141a8ee4022e9a50f2978fc52d2ec5d77cfeec1c
