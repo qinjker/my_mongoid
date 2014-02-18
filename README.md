@@ -7,3 +7,5 @@ my_mongoid
 ==========
 
 Ruby 训练营第一个热身gem
+
+[![Build Status]](https://travis-ci.org/qinjker/my_mongoid)
