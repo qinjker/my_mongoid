@@ -2,18 +2,29 @@
 require "my_mongoid/version"
 
 module MyMongoid
-
-end
+	def self.models
+			@models ||= []
+		end
 	
-#def MyMongoid::Document
-module MyMongoid::Document
-
-end
-
-#def MyMongoid::Document::ClassMethods
-module MyMongoid::Document::ClassMethods
-	#定义is_mongoid_model?方法
-	def is_mongoid_model?
-		true
+		def self.register_model(klass)
+			models.push klass if !models.include?(klass)
+		end
 	end
+	
+	module MyMongoid::Document
+		def self.included(klass)
+			klass.module_eval do
+				extend ClassMethods
+				#field :_id, :as => :id
+				MyMongoid.register_model(klass)
+			end
+		end
+	
+	end
+	
+	module MyMongoid::Document::ClassMethods
+		def is_mongoid_model?
+			true
+		end
+	
 end
