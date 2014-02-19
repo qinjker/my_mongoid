@@ -2,10 +2,10 @@
 require "my_mongoid/version"
 
 module MyMongoid
-	def self.models
-		@models ||= []
-	end
-
+  def self.models
+    @models ||= []
+  end
+  
 	def self.register_model(klass)
 		models.push klass if !models.include?(klass)
 	end
