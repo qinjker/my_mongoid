@@ -58,6 +58,10 @@ describe "Declare fields:" do
   it "automatically declares the '_id' field"  do
     expect(Event.fields.keys).to include("_id")
   end
+  
+  it "automatically declares the 'id' field " do
+    expect(Event.fields.keys).to include("id")
+  end
 end
 
 describe "Process Attributes:" do
