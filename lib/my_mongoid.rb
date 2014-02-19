@@ -23,7 +23,6 @@ module MyMongoid::Document
 		klass.module_eval do
 			extend ClassMethods
 			field :_id, :as => :id
-			field :id,:as=>:_id
 			MyMongoid.register_model(klass)
 		end
 	end
