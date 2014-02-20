@@ -8,6 +8,8 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 
 require "my_mongoid"
+require 'coveralls'
+Coveralls.wear!
 RSpec.configure do |config|
 	
   # Limit the spec run to only specs with the focus metadata. If no specs have
