@@ -21,9 +21,9 @@ module MyMongoid::Document
 
   def self.included(klass)
     klass.module_eval do
-		  extend ClassMethods
-		  field :_id, :as => :id
-		  MyMongoid.register_model(klass)
+      extend ClassMethods
+      field :_id, :as => :id
+      MyMongoid.register_model(klass)
     end
   end
 	
@@ -61,7 +61,7 @@ module MyMongoid::Document
 	
   #判断是不是一个新实例
   def new_record?
-	  return @new_record
+    return @new_record
   end
 end
 
@@ -100,7 +100,7 @@ module MyMongoid::Document::ClassMethods
       self.module_eval do
         alias_method alias_name, name
         alias_method "#{alias_name}=", "#{name}="
-        end
+      end
     end
 		
   end
