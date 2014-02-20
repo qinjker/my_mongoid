@@ -44,9 +44,9 @@ module MyMongoid::Document
   #定义初始化接收一个hash
   def initialize(attrs={})
     raise ArgumentError unless attrs.is_a?(Hash)
-    @attributes = {}#attrs
+    @attributes = attrs
     @new_record = true
-    process_attributes(attrs)
+    #process_attributes(attrs)
   end
   
   def process_attributes(attrs)
