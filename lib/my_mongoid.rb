@@ -1,6 +1,6 @@
 #coding: utf-8
 require "my_mongoid/version"
-
+require "my_mongoid/configuration"
 module MyMongoid
   def self.models
     @models ||= []
@@ -8,6 +8,16 @@ module MyMongoid
   
   def self.register_model(klass)
     models.push klass if !models.include?(klass)
+  end
+  
+  #定义类的方法configuration
+  def self.configuration
+    Configuration.instance
+  end
+  
+  #yield 占位符号
+  def self.configure
+   yield configuration
   end
 end
 
@@ -26,7 +36,7 @@ module MyMongoid::Document
       MyMongoid.register_model(klass)
     end
   end
-	
+
   #定义一个可以在对象实例中可读的属性
   #类似等于 def attributes
   #	return @attributes
@@ -46,7 +56,7 @@ module MyMongoid::Document
     raise ArgumentError unless attrs.is_a?(Hash)
     @attributes = attrs
     @new_record = true
-    #process_attributes(attrs)
+    process_attributes(attrs)
   end
   
   def process_attributes(attrs)
