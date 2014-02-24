@@ -1,6 +1,9 @@
 #coding: utf-8
 require "my_mongoid/version"
 require "my_mongoid/configuration"
+require "my_mongoid/error"
+require "moped"
+
 module MyMongoid
   def self.models
     @models ||= []
@@ -19,13 +22,26 @@ module MyMongoid
   def self.configure
    yield configuration
   end
+  
+  def self.remove
+    remove_instance_variable(:@session) if defined?(@session)
+  end
+  
+  def self.session
+    return @session if defined?(@session)
+    host = configuration.host
+    database = configuration.database
+    if host.nil? || database.nil?
+      raise UnconfiguredDatabaseError
+    end
+    @session = Moped::Session.new([host])
+    @session.use(database)
+    @session
+  end
+  
 end
 
-class MyMongoid::DuplicateFieldError < RuntimeError
-end
 
-class MyMongoid::UnknownAttributeError < RuntimeError
-end
 
 module MyMongoid::Document
 

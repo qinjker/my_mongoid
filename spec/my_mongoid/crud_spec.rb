@@ -1,11 +1,11 @@
 require "spec_helper"
 
-# def config_db
-#   MyMongoid.config do |config|
-#     config.host = "127.0.0.1:27017"
-#     config.database = "my_mongoid_test"
-#   end
-# end
+def config_db
+  MyMongoid.configure do |x|
+    x.host = "127.0.0.1:27017"
+    x.database = "my_mongoid_test"
+  end
+end
 
 class Event
   include MyMongoid::Document
@@ -42,6 +42,35 @@ describe "MyMongoid.configure" do
     MyMongoid.configure do |conf|
       expect(conf).to eq(MyMongoid::configuration)
     end
+  end
+end
+
+describe "MyMongoid.session" do
+  before(:all) {
+    config_db
+  }
+  
+  before(:each) {
+    # remove memoized session before each test
+    #MyMongoid.remove_instance_variable(:@session) if MyMongoid.instance_variable_defined?(:@session) ruby 1.9不支持类调用 是私有方法
+    MyMongoid.remove if MyMongoid.instance_variable_defined?(:@session)
+  }
+  
+  it  "should return a Moped::Session" do
+   expect(MyMongoid.session).to be_a(Moped::Session)
+  end
+  
+  it "should memoize the session @session" do
+    expect(MyMongoid.session).to eq(MyMongoid.instance_variable_get(:@session))
+  end
+  
+  it "should raise MyMongoid::UnconfiguredDatabaseError if host and database are not configured" do
+    config = MyMongoid.configuration
+    config.host = nil
+    config.database = nil
+    expect{
+      MyMongoid.session
+    }.to raise_error(MyMongoid::UnconfiguredDatabaseError)
   end
 end
 
