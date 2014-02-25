@@ -75,6 +75,10 @@ module MyMongoid::Document
     process_attributes(attrs)
   end
   
+  def to_document
+    self.attributes
+  end
+  
   def process_attributes(attrs)
 	  attrs.map do |name,value|
       raise MyMongoid::UnknownAttributeError if !self.respond_to?(name)
@@ -85,9 +89,19 @@ module MyMongoid::Document
   #Module的一个私有实例方法，只能用于给方法起别名
   alias_method :attributes=,:process_attributes
 	
+  #保存方法
+  def save
+    if self.id.nil?
+      self.id = BSON::ObjectId.new
+    end
+    result = self.class.collection.insert(self.to_document)
+    @new_record = false
+    true
+  end
+	
   #判断是不是一个新实例
   def new_record?
-    return @new_record
+    return  @new_record == true
   end
 end
 
@@ -100,11 +114,18 @@ class MyMongoid::Field
 end
 
 module MyMongoid::Document::ClassMethods
-
+  require "active_support/inflector"
   def is_mongoid_model?
     true
   end
 	
+	def collection
+    MyMongoid.session[collection_name]  
+  end
+  
+	def collection_name
+    self.to_s.tableize
+  end
 	
   def field(name,opts={})
     name = name.to_s
@@ -131,6 +152,25 @@ module MyMongoid::Document::ClassMethods
 		
   end
 	
+	def create(attrs)
+   obj = self.new(attrs)
+   obj.save
+   obj
+  end
+  
+  def instantiate(attrs)
+    doc = allocate
+    doc.instance_variable_set(:@attributes,attrs)
+    doc
+  end
+  
+  def find(query)
+    result = self.collection.find(query).one
+    if result.nil?
+      raise MyMongoid::RecordNotFoundError
+    end
+    Event.instantiate(result)
+  end
 	
   def fields
     @fields
